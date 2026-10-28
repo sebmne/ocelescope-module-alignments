@@ -1,0 +1,14 @@
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
+
+
+class Model(BaseModel):
+    """Validated domain values, also used directly at the HTTP boundary."""
+
+    model_config = ConfigDict(
+        frozen=True,
+        alias_generator=to_camel,
+        validate_by_name=True,
+        validate_by_alias=True,
+        serialize_by_alias=True,
+    )

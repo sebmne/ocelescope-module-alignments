@@ -1,0 +1,81 @@
+[project]
+name = "ocelescope-module-oc-alignments"
+version = "0.1.0"
+readme = "README.md"
+description = "Object-centric alignments after Liss, Adams and van der Aalst: compute, explore and keep them"
+authors = [{ name = "Sebastian Menne" }]
+requires-python = ">=3.11"
+dependencies = [
+  "ocelescope-backend>=0.10.2,<0.11.0",
+  "pydantic>=2.11",
+  # process executions (connected components) and variants (graph isomorphism)
+  "networkx>=3.2",
+]
+
+[dependency-groups]
+dev = ["httpx>=0.27", "import-linter>=2.3", "pyright>=1.1.400", "pytest>=8", "ruff>=0.12"]
+
+[project.entry-points."ocelescope_backend.modules"]
+ocAlignments = "ocelescope_module_oc_alignments.module:OCAlignments"
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["*.md", "vendor"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pyright]
+include = ["src", "tests"]
+# The tests import their helpers (api.py, conftest.py, ...) by module name, as pytest runs them.
+extraPaths = ["src", "tests"]
+typeCheckingMode = "standard"
+# runs in the environment of the reference implementation (scripts/reference.py)
+ignore = ["tests/reference/liss_alignments.py"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+# The architecture, enforced (`pnpm run check:backend` at the repository root runs these).
+# One hexagon with dependencies pointing inwards:
+# module -> api -> infrastructure -> application -> domain.
+[tool.importlinter]
+root_package = "ocelescope_module_oc_alignments"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Layers: module -> api -> infrastructure -> application -> domain"
+type = "layers"
+layers = [
+  "ocelescope_module_oc_alignments.module",
+  "ocelescope_module_oc_alignments.api",
+  "(ocelescope_module_oc_alignments.infrastructure)",
+  "ocelescope_module_oc_alignments.application",
+  "ocelescope_module_oc_alignments.domain",
+]
+
+[[tool.importlinter.contracts]]
+name = "Routes reach adapters only through the composition root (api/dependencies.py)"
+type = "forbidden"
+source_modules = ["ocelescope_module_oc_alignments.api.routes", "ocelescope_module_oc_alignments.api.router"]
+forbidden_modules = ["ocelescope_module_oc_alignments.infrastructure"]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Application and domain know no web framework or host"
+type = "forbidden"
+source_modules = ["ocelescope_module_oc_alignments.application", "ocelescope_module_oc_alignments.domain"]
+forbidden_modules = ["fastapi", "ocelescope", "ocelescope_backend", "duckdb"]
+
+[[tool.importlinter.contracts]]
+name = "Domain has no dependency on application, including its ports"
+type = "forbidden"
+source_modules = ["ocelescope_module_oc_alignments.domain"]
+forbidden_modules = ["ocelescope_module_oc_alignments.application"]

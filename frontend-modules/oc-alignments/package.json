@@ -1,0 +1,63 @@
+{
+  "name": "@instance/oc-alignments",
+  "version": "0.1.0",
+  "description": "Object-centric alignments after Liss, Adams and van der Aalst: compute, explore and keep them",
+  "author": "Sebastian Menne",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate:api": "uv run ocelescope-backend openapi --module ocAlignments",
+    "build": "pnpm run generate:api && orval && tsdown",
+    "dev": "tsdown --watch ./src",
+    "typecheck": "tsc --noEmit",
+    "check:architecture": "depcruise src --config .dependency-cruiser.cjs"
+  },
+  "peerDependencies": {
+    "@mantine/core": "catalog:",
+    "@mantine/hooks": "catalog:",
+    "@ocelescope/api-base": "catalog:",
+    "@ocelescope/api-client": "catalog:",
+    "@ocelescope/core": "catalog:",
+    "@ocelescope/resources": "catalog:",
+    "@r4pm/components": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@xyflow/react": "catalog:",
+    "axios": "catalog:",
+    "elkjs": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@mantine/core": "catalog:",
+    "@mantine/hooks": "catalog:",
+    "@ocelescope/api-base": "catalog:",
+    "@ocelescope/api-client": "catalog:",
+    "@ocelescope/api-config": "catalog:",
+    "@ocelescope/core": "catalog:",
+    "@ocelescope/resources": "catalog:",
+    "@r4pm/components": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "@types/react": "catalog:",
+    "@xyflow/react": "catalog:",
+    "axios": "catalog:",
+    "dependency-cruiser": "^18.4.0",
+    "elkjs": "catalog:",
+    "lucide-react": "catalog:",
+    "next": "catalog:",
+    "orval": "catalog:",
+    "react": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

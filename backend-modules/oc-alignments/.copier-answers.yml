@@ -1,0 +1,7 @@
+# Changes here will be overwritten by Copier; do NOT edit manually
+_commit: 06447d9
+_src_path: gh:promi4s/create-ocelescope-backend-module
+author: Menne, Sebastian
+description: 'Object-centric alignments after Liss, Adams and van der Aalst: compute,
+    explore and keep them'
+module_label: OC Alignments
